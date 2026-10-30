@@ -1,8 +1,32 @@
 'use client';
+import { authClient } from '@/lib/auth-client';
 import Link from 'next/link';
-import React from 'react';
+import { useRouter } from 'next/navigation';
+
+
 
 const SignUpPage = () => {
+const router = useRouter()
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const formValue = Object.fromEntries(formData.entries());
+
+        const { data, error } = await authClient.signUp.email({
+            name: formValue.name as string,
+            email: formValue.email as string,
+            password: formValue.password as string,
+            callbackURL: "/",
+        });
+
+        if(data){
+            router.push('/');
+        }
+    
+    }
+
+
     return (
         <div className="min-h-screen bg-[#f3f6f3] flex flex-col items-center justify-center p-4">
             {/* Title & Subtitle */}
@@ -17,7 +41,7 @@ const SignUpPage = () => {
 
             {/* Main Card */}
             <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
-                <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                <form className="space-y-4" onSubmit={handleSubmit}>
                     {/* Name Field */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-1.5">
@@ -25,6 +49,7 @@ const SignUpPage = () => {
                         </label>
                         <input
                             type="text"
+                            name="name"
                             placeholder="যেমন: রহিম উদ্দিন"
                             className="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all text-sm"
                         />
@@ -37,6 +62,7 @@ const SignUpPage = () => {
                         </label>
                         <input
                             type="email"
+                            name="email"
                             placeholder="you@example.com"
                             className="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all text-sm"
                         />
@@ -45,10 +71,11 @@ const SignUpPage = () => {
                     {/* Password Field */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                            পাসওয়ার্ড
+                            পাসওয়ার্ড
                         </label>
                         <input
                             type="password"
+                            name="password"
                             placeholder="কমপক্ষে ৮ অক্ষর"
                             className="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all text-sm"
                         />
@@ -57,10 +84,11 @@ const SignUpPage = () => {
                     {/* Confirm Password Field */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                            পাসওয়ার্ড নিশ্চিত করুন
+                            পাসওয়ার্ড নিশ্চিত করুন
                         </label>
                         <input
                             type="password"
+                            name="confirmPassword"
                             placeholder="আবার লিখুন"
                             className="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all text-sm"
                         />
@@ -107,7 +135,7 @@ const SignUpPage = () => {
                                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
                             />
                         </svg>
-                        <span>Google দিয়ে চালিয়ে যান</span>
+                        <span>Google দিয়ে চালিয়ে যান</span>
                     </button>
 
                     <button
@@ -117,7 +145,7 @@ const SignUpPage = () => {
                         <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
                             <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
                         </svg>
-                        <span>GitHub দিয়ে চালিয়ে যান</span>
+                        <span>GitHub দিয়ে চালিয়ে যান</span>
                     </button>
                 </div>
 
