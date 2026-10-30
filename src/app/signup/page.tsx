@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 
 const SignUpPage = () => {
-const router = useRouter()
+    const router = useRouter()
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -20,12 +20,19 @@ const router = useRouter()
             callbackURL: "/",
         });
 
-        if(data){
+        if (data) {
             router.push('/');
         }
-    
+
     }
 
+    const handleGoogleSignIn = async () => {
+        await authClient.signIn.social({
+            provider: "google",
+            callbackURL: '/',
+        });
+
+    };
 
     return (
         <div className="min-h-screen bg-[#f3f6f3] flex flex-col items-center justify-center p-4">
@@ -115,6 +122,7 @@ const router = useRouter()
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
                     <button
                         type="button"
+                        onClick={handleGoogleSignIn}
                         className="flex items-center justify-center gap-2 py-2.5 px-3 border border-gray-200 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors text-xs font-semibold text-gray-700"
                     >
                         <svg className="w-4 h-4" viewBox="0 0 24 24">
