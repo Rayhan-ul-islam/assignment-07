@@ -1,3 +1,4 @@
+
 "use client";
 
 import { authClient } from "@/lib/auth-client";
@@ -14,7 +15,7 @@ type Category = {
 };
 
 const NavBar = () => {
-    const [date, setDate] = useState<string>("");
+    const [date, setDate] = useState("");
     const [category, setCategory] = useState<Category[]>([]);
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -32,6 +33,7 @@ const NavBar = () => {
         router.refresh();
     };
 
+    // Date
     useEffect(() => {
         setDate(
             new Date().toLocaleDateString("bn-BD", {
@@ -40,13 +42,31 @@ const NavBar = () => {
         );
     }, []);
 
-    useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`)
-            .then((res) => res.json())
-            .then((data: Category[]) => {
-                setCategory(data);
-            });
-    }, []);
+    // Fetch Categories
+useEffect(() => {
+    const fetchCategories = async () => {
+        try {
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/categories`
+            );
+
+            console.log("Status:", res.status);
+
+            const data = await res.json();
+
+            console.log("API Data:", data);
+            console.log("Is Array:", Array.isArray(data));
+
+            setCategory(Array.isArray(data) ? data : data.data ?? []);
+
+        } catch (error) {
+            console.error("Fetch Error:", error);
+        }
+    };
+
+    fetchCategories();
+}, []);
+
 
     return (
         <div>
@@ -69,6 +89,7 @@ const NavBar = () => {
                             <p className="text-2xl font-bold sm:text-3xl md:text-4xl">
                                 বাজার দর
                             </p>
+
                             <p className="text-xs text-gray-600 sm:text-sm">
                                 {date}
                             </p>
@@ -88,9 +109,11 @@ const NavBar = () => {
                                     className="flex items-center gap-2 rounded-lg border border-gray-200 p-2 hover:bg-gray-50"
                                 >
                                     {user.image ? (
-                                        <img
-                                            src={user?.image}
+                                        <Image
+                                            src={user.image}
                                             alt="Profile"
+                                            width={36}
+                                            height={36}
                                             className="h-9 w-9 rounded-full object-cover"
                                         />
                                     ) : (
@@ -108,7 +131,6 @@ const NavBar = () => {
                                     </span>
                                 </button>
 
-                                {/* Dropdown Menu */}
                                 {/* Dropdown Menu */}
                                 {dropdownOpen && (
                                     <div className="absolute right-0 z-50 mt-2 w-56 rounded-lg border border-gray-200 bg-white py-2 shadow-lg">
@@ -132,12 +154,13 @@ const NavBar = () => {
                                         >
                                             আমার প্রোফাইল
                                         </Link>
+
                                         <Link
                                             href="/update-profile"
                                             onClick={() => setDropdownOpen(false)}
                                             className="block px-4 py-2 text-sm font-normal text-gray-600 hover:bg-green-50 hover:text-green-700"
                                         >
-                                         আপডেট প্রোফাইল
+                                            আপডেট প্রোফাইল
                                         </Link>
 
                                         {/* Logout */}
@@ -148,22 +171,23 @@ const NavBar = () => {
                                         >
                                             Logout
                                         </button>
-
                                     </div>
                                 )}
                             </div>
                         ) : (
                             <>
-                                <Link href="/signin">
-                                    <button className="btn btn-sm sm:btn-md">
-                                        সাইন ইন
-                                    </button>
+                                <Link
+                                    href="/signin"
+                                    className="btn btn-sm sm:btn-md"
+                                >
+                                    সাইন ইন
                                 </Link>
 
-                                <Link href="/signup">
-                                    <button className="btn btn-success btn-sm sm:btn-md">
-                                        সাইন আপ
-                                    </button>
+                                <Link
+                                    href="/sign-up"
+                                    className="btn btn-success btn-sm sm:btn-md"
+                                >
+                                    সাইন আপ
                                 </Link>
                             </>
                         )}
@@ -175,23 +199,27 @@ const NavBar = () => {
             {/* Category Navigation */}
             <nav className="border-b border-gray-200">
                 <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-2 py-2">
+
                     {category.map((cat) => {
-                        const isActive = pathName === `/category/${cat.slug}`;
+                        const isActive =
+                            pathName === `/category/${cat.slug}`;
 
                         return (
                             <Link
                                 href={`/category/${cat.slug}`}
                                 key={cat.id}
-                                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm transition hover:bg-green-100 hover:text-green-700 ${isActive
-                                    ? "bg-[#05893E] text-white"
-                                    : ""
-                                    }`}
+                                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm transition hover:bg-green-100 hover:text-green-700 ${
+                                    isActive
+                                        ? "bg-[#05893E] text-white"
+                                        : ""
+                                }`}
                             >
                                 <span>{cat.icon}</span>
                                 <span>{cat.nameBn}</span>
                             </Link>
                         );
                     })}
+
                 </div>
             </nav>
         </div>
