@@ -89,7 +89,7 @@ const NavBar = () => {
                                 >
                                     {user.image ? (
                                         <img
-                                            src={user.image}
+                                            src={user?.image}
                                             alt="Profile"
                                             className="h-9 w-9 rounded-full object-cover"
                                         />
@@ -131,6 +131,13 @@ const NavBar = () => {
                                             className="block px-4 py-2 text-sm font-normal text-gray-600 hover:bg-green-50 hover:text-green-700"
                                         >
                                             আমার প্রোফাইল
+                                        </Link>
+                                        <Link
+                                            href="/update-profile"
+                                            onClick={() => setDropdownOpen(false)}
+                                            className="block px-4 py-2 text-sm font-normal text-gray-600 hover:bg-green-50 hover:text-green-700"
+                                        >
+                                         আপডেট প্রোফাইল
                                         </Link>
 
                                         {/* Logout */}
