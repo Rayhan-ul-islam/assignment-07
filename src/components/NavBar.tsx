@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 type Category = {
     id: string;
@@ -27,10 +28,24 @@ const NavBar = () => {
 
     // Logout
     const handleLogout = async () => {
-        await authClient.signOut();
-        setDropdownOpen(false);
-        router.push("/signin");
-        router.refresh();
+        try {
+            const { error } = await authClient.signOut();
+
+            if (error) {
+                toast.error("Logout করতে সমস্যা হয়েছে!");
+                return;
+            }
+
+            toast.success("Successfully logged out!");
+
+            setDropdownOpen(false);
+            router.push("/signin");
+            router.refresh();
+
+        } catch (error) {
+            console.error("Logout Error:", error);
+            toast.error("Something went wrong!");
+        }
     };
 
     // Date
@@ -43,30 +58,33 @@ const NavBar = () => {
     }, []);
 
     // Fetch Categories
-useEffect(() => {
-    const fetchCategories = async () => {
-        try {
-            const res = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/categories`
-            );
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const res = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/categories`
+                );
 
-            console.log("Status:", res.status);
+                if (!res.ok) {
+                    throw new Error("Category fetch failed");
+                }
 
-            const data = await res.json();
+                const data = await res.json();
 
-            console.log("API Data:", data);
-            console.log("Is Array:", Array.isArray(data));
+                const categories = Array.isArray(data)
+                    ? data
+                    : data.data ?? [];
 
-            setCategory(Array.isArray(data) ? data : data.data ?? []);
+                setCategory(categories);
 
-        } catch (error) {
-            console.error("Fetch Error:", error);
-        }
-    };
+            } catch (error) {
+                console.error("Fetch Error:", error);
+                toast.error("Category load করতে সমস্যা হয়েছে!");
+            }
+        };
 
-    fetchCategories();
-}, []);
-
+        fetchCategories();
+    }, []);
 
     return (
         <div>
@@ -105,7 +123,9 @@ useEffect(() => {
                                 {/* User Dropdown Button */}
                                 <button
                                     type="button"
-                                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                                    onClick={() =>
+                                        setDropdownOpen(!dropdownOpen)
+                                    }
                                     className="flex items-center gap-2 rounded-lg border border-gray-200 p-2 hover:bg-gray-50"
                                 >
                                     {user.image ? (
@@ -149,7 +169,9 @@ useEffect(() => {
                                         {/* Profile */}
                                         <Link
                                             href="/profile"
-                                            onClick={() => setDropdownOpen(false)}
+                                            onClick={() =>
+                                                setDropdownOpen(false)
+                                            }
                                             className="block px-4 py-2 text-sm font-normal text-gray-600 hover:bg-green-50 hover:text-green-700"
                                         >
                                             আমার প্রোফাইল
@@ -157,7 +179,9 @@ useEffect(() => {
 
                                         <Link
                                             href="/update-profile"
-                                            onClick={() => setDropdownOpen(false)}
+                                            onClick={() =>
+                                                setDropdownOpen(false)
+                                            }
                                             className="block px-4 py-2 text-sm font-normal text-gray-600 hover:bg-green-50 hover:text-green-700"
                                         >
                                             আপডেট প্রোফাইল
@@ -191,7 +215,6 @@ useEffect(() => {
                                 </Link>
                             </>
                         )}
-
                     </div>
                 </div>
             </header>
@@ -219,7 +242,6 @@ useEffect(() => {
                             </Link>
                         );
                     })}
-
                 </div>
             </nav>
         </div>
