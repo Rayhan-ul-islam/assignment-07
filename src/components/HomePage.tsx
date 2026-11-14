@@ -1,11 +1,14 @@
 import React from 'react';
 import Hero from './Hero';
+import PriceIncrease from './PriceIncrease';
+import PriceDecreased from './PriceDecreased';
 
 const HomePage = () => {
     return (
         <div>
             <Hero></Hero>
-            working
+            <PriceIncrease></PriceIncrease>
+            <PriceDecreased></PriceDecreased>
         </div>
     );
 };
