@@ -1,8 +1,9 @@
 
 "use client";
 
+import { Suspense, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import Link from "next/link";
 
 type Product = {
     id: number;
@@ -23,7 +24,7 @@ type Product = {
     };
 };
 
-const CategoryPage = () => {
+const CategoryContent = () => {
     const { slug } = useParams<{ slug: string }>();
 
     const [products, setProducts] = useState<Product[]>([]);
@@ -91,8 +92,18 @@ const CategoryPage = () => {
 
     return (
         <main className="min-h-screen bg-[#f1f6f1] px-4 py-8">
-
             <div className="mx-auto max-w-6xl">
+
+                {/* Home Button */}
+                <div className="mb-5">
+                    <Link
+                        href="/"
+                        className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-green-50 hover:text-green-700"
+                    >
+                        <span>←</span>
+                        হোম পেজে ফিরে যান
+                    </Link>
+                </div>
 
                 {/* Category Header */}
                 <div className="mb-3 flex items-center gap-3 rounded-xl border border-gray-200 bg-white/80 p-4">
@@ -110,7 +121,6 @@ const CategoryPage = () => {
                             {products.length}টি পণ্যের আজকের দাম ও পরিবর্তন
                         </p>
                     </div>
-
                 </div>
 
                 {/* Sorting */}
@@ -129,7 +139,6 @@ const CategoryPage = () => {
                         <option value="low">দাম: কম থেকে বেশি</option>
                         <option value="high">দাম: বেশি থেকে কম</option>
                     </select>
-
                 </div>
 
                 {/* Product Count */}
@@ -143,11 +152,9 @@ const CategoryPage = () => {
                         এই ক্যাটাগরিতে কোনো পণ্য পাওয়া যায়নি।
                     </div>
                 ) : (
-
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
 
                         {sortedProducts.map((product) => (
-
                             <div
                                 key={product.id}
                                 className="rounded-xl border border-gray-200 bg-white/80 p-3 transition hover:border-green-200 hover:shadow-sm"
@@ -169,7 +176,6 @@ const CategoryPage = () => {
                                             প্রতি {product.unit}
                                         </p>
                                     </div>
-
                                 </div>
 
                                 {/* Price */}
@@ -202,20 +208,28 @@ const CategoryPage = () => {
                                             : "—"
                                         } {product.change.pct}%
                                     </div>
-
                                 </div>
-
                             </div>
-
                         ))}
-
                     </div>
-
                 )}
-
             </div>
-
         </main>
+    );
+};
+
+// Main Category Page
+const CategoryPage = () => {
+    return (
+        <Suspense
+            fallback={
+                <div className="min-h-screen flex items-center justify-center bg-[#f1f6f1]">
+                    <p className="text-gray-500">লোড হচ্ছে...</p>
+                </div>
+            }
+        >
+            <CategoryContent />
+        </Suspense>
     );
 };
 

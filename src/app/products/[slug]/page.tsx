@@ -1,6 +1,8 @@
 
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
 interface ChangeData {
   dir: "up" | "down" | "flat";
@@ -34,12 +36,22 @@ interface Product {
 const ProductDetails = async ({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }) => {
-  const { id } = await params;
+  const { slug } = await params;
 
+  // Check Login Session
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    redirect(`/signin?callbackURL=${encodeURIComponent(`/products/${slug}`)}`);
+  }
+
+  // Fetch Product
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/products/${id}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/products/${slug}`,
     { cache: "no-store" }
   );
 
@@ -47,7 +59,8 @@ const ProductDetails = async ({
     notFound();
   }
 
-  const product: Product = await res.json();
+  const result = await res.json();
+  const product: Product = result.data ?? result;
 
   const prices = [
     { title: "আজকের দাম", price: product.today },
@@ -175,7 +188,7 @@ const ProductDetails = async ({
               </thead>
 
               <tbody>
-                {product.markets.map((market, index) => (
+                {(product.markets ?? []).map((market, index) => (
                   <tr
                     key={index}
                     className="border-b border-gray-100 transition-colors hover:bg-green-50"

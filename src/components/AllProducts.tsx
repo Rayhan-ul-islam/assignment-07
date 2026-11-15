@@ -29,6 +29,15 @@ interface AllProductsProps {
 const AllProducts = ({ products }: AllProductsProps) => {
   return (
     <section className="bg-[#f7f9f6] px-4 py-10 md:px-8">
+      <div className="mb-5">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-green-50 hover:text-green-700"
+          >
+            <span>←</span>
+            হোম পেজে ফিরে যান
+          </Link>
+        </div>
       <div className="mx-auto max-w-7xl">
 
         {/* Header */}
@@ -47,7 +56,7 @@ const AllProducts = ({ products }: AllProductsProps) => {
           {products.map((product) => (
             <Link
               key={product.id}
-              href={`/products/${product.id}`}
+              href={`/products/${product.slug}`}
               className="flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
             >
               {/* Product Info */}
