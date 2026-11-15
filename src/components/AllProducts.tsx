@@ -1,4 +1,6 @@
 
+import Link from "next/link";
+
 interface ChangeData {
   dir: "up" | "down" | "flat";
   pct: number;
@@ -34,6 +36,7 @@ const AllProducts = ({ products }: AllProductsProps) => {
           <h2 className="mb-1 text-2xl font-bold text-gray-800">
             সব পণ্য
           </h2>
+
           <p className="text-sm text-gray-500">
             মোট {products.length}টি পণ্য দেখানো হচ্ছে
           </p>
@@ -42,8 +45,9 @@ const AllProducts = ({ products }: AllProductsProps) => {
         {/* Products Grid */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => (
-            <div
+            <Link
               key={product.id}
+              href={`/products/${product.id}`}
               className="flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
             >
               {/* Product Info */}
@@ -56,6 +60,7 @@ const AllProducts = ({ products }: AllProductsProps) => {
                   <h3 className="text-lg font-bold text-gray-800">
                     {product.nameBn}
                   </h3>
+
                   <p className="mt-0.5 text-xs text-gray-400">
                     {product.unit}
                   </p>
@@ -96,7 +101,7 @@ const AllProducts = ({ products }: AllProductsProps) => {
                   {product.change?.pct ?? 0}%
                 </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
