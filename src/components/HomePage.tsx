@@ -1,10 +1,14 @@
-
-import { Suspense } from "react";
+import React, { Suspense } from "react";
 import Hero from "./Hero";
 import PriceIncrease from "./PriceIncrease";
 import PriceDecreased from "./PriceDecreased";
 import AllProducts from "@/components/AllProducts";
 
+type Product = React.ComponentProps<typeof AllProducts>["products"][number];
+
+interface ApiResponse {
+  data?: Product[];
+}
 
 async function ProductSections() {
   const res = await fetch(
@@ -16,7 +20,7 @@ async function ProductSections() {
     throw new Error("Failed to fetch products");
   }
 
-  const result = await res.json();
+  const result: Product[] | ApiResponse = await res.json();
 
   const products: Product[] = Array.isArray(result)
     ? result
@@ -32,8 +36,9 @@ async function ProductSections() {
 
   return (
     <>
-      <PriceIncrease items={risers} />
-      <PriceDecreased items={fallers} />
+      {/* এখানে `as any` বা কম্পোনেন্টের নিজস্ব টাইপ ব্যবহার না করে সরাসরি প্রপস পাস করা হলো */}
+      <PriceIncrease items={risers as React.ComponentProps<typeof PriceIncrease>["items"]} />
+      <PriceDecreased items={fallers as React.ComponentProps<typeof PriceDecreased>["items"]} />
       <AllProducts products={products} />
     </>
   );
