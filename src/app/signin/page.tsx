@@ -126,8 +126,16 @@ const SignIn = () => {
                         সাইন আপ করুন
                     </Link>
                 </p>
-
+<div className="mt-6 text-center">
+                <Link
+                    href="/"
+                    className="text-gray-500 hover:text-gray-700 text-sm transition-colors"
+                >
+                    ← হোম পেজে ফিরে যান
+                </Link>
             </div>
+            </div>
+            
         </div>
     );
 };

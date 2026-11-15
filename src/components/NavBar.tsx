@@ -92,27 +92,29 @@ const NavBar = () => {
                 <div className="mx-auto flex max-w-6xl flex-col gap-4 py-4 sm:flex-row sm:items-center sm:justify-between">
 
                     {/* Logo */}
-                    <div className="flex items-center gap-3 sm:gap-4">
-                        <div className="shrink-0 rounded-md bg-[#05893E] p-2">
-                            <Image
-                                src="/logo-icon.png"
-                                alt="logo"
-                                width={40}
-                                height={30}
-                                className="h-auto w-8 sm:w-10"
-                            />
-                        </div>
+                    <Link href="/">
+                        <div className="flex items-center gap-3 sm:gap-4">
+                            <div className="shrink-0 rounded-md bg-[#05893E] p-2">
+                                <Image
+                                    src="/logo-icon.png"
+                                    alt="logo"
+                                    width={40}
+                                    height={30}
+                                    className="h-auto w-8 sm:w-10"
+                                />
+                            </div>
 
-                        <div className="min-w-0">
-                            <p className="text-2xl font-bold sm:text-3xl md:text-4xl">
-                                বাজার দর
-                            </p>
+                            <div className="min-w-0">
+                                <p className="text-2xl font-bold sm:text-3xl md:text-4xl">
+                                    বাজার দর
+                                </p>
 
-                            <p className="text-xs text-gray-600 sm:text-sm">
-                                {date}
-                            </p>
+                                <p className="text-xs text-gray-600 sm:text-sm">
+                                    {date}
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                    </Link>
 
                     {/* Authentication */}
                     <div className="flex items-center gap-2 sm:gap-3">
@@ -231,11 +233,10 @@ const NavBar = () => {
                             <Link
                                 href={`/category/${cat.slug}`}
                                 key={cat.id}
-                                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm transition hover:bg-green-100 hover:text-green-700 ${
-                                    isActive
+                                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm transition hover:bg-green-100 hover:text-green-700 ${isActive
                                         ? "bg-[#05893E] text-white"
                                         : ""
-                                }`}
+                                    }`}
                             >
                                 <span>{cat.icon}</span>
                                 <span>{cat.nameBn}</span>

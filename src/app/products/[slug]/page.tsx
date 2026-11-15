@@ -46,7 +46,9 @@ const ProductDetails = async ({
   });
 
   if (!session) {
-    redirect(`/signin?callbackURL=${encodeURIComponent(`/products/${slug}`)}`);
+    redirect(
+      `/signin?callbackURL=${encodeURIComponent(`/products/${slug}`)}`
+    );
   }
 
   // Fetch Product
@@ -73,7 +75,7 @@ const ProductDetails = async ({
     <main className="min-h-screen bg-[#f0f6f1] px-4 py-8 md:px-8">
       <div className="mx-auto max-w-6xl">
 
-        {/* Back to Home Button */}
+        {/* Back to Home */}
         <div className="mb-5">
           <Link
             href="/"
@@ -86,7 +88,6 @@ const ProductDetails = async ({
 
         {/* Product Header */}
         <section className="mb-5 flex items-center justify-between rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
-
           <div className="flex items-center gap-4">
             <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-gray-50 text-4xl">
               {product.image || product.categoryIcon}
@@ -122,26 +123,25 @@ const ProductDetails = async ({
 
             <span
               className={`text-xs font-semibold ${
-                product.change.dir === "up"
+                product.change?.dir === "up"
                   ? "text-red-500"
-                  : product.change.dir === "down"
+                  : product.change?.dir === "down"
                     ? "text-green-600"
                     : "text-gray-500"
               }`}
             >
-              {product.change.dir === "up"
+              {product.change?.dir === "up"
                 ? "▲"
-                : product.change.dir === "down"
+                : product.change?.dir === "down"
                   ? "▼"
                   : "—"}{" "}
-              {product.change.pct}%
+              {product.change?.pct ?? 0}%
             </span>
           </div>
         </section>
 
         {/* Price Summary */}
         <section className="mb-5 rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
-
           <h2 className="mb-4 font-bold text-gray-800">
             দামের সারসংক্ষেপ
           </h2>
@@ -170,14 +170,12 @@ const ProductDetails = async ({
 
         {/* Market Prices */}
         <section className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
-
           <h2 className="mb-4 font-bold text-gray-800">
             বাজারভিত্তিক আজকের দাম
           </h2>
 
           <div className="overflow-x-auto">
             <table className="w-full min-w-[600px] text-left text-sm">
-
               <thead>
                 <tr className="border-b border-gray-200 bg-[#f8faf8] text-gray-600">
                   <th className="p-3">বাজার</th>
@@ -211,7 +209,6 @@ const ProductDetails = async ({
                   </tr>
                 ))}
               </tbody>
-
             </table>
           </div>
         </section>

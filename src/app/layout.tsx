@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 
 import "react-toastify/dist/ReactToastify.css";
 import ToastProvider from "@/components/ToastContainer";
+import MarketMarquee from "@/components/MarketMarquee";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,8 +38,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {/* Navbar */}
         <Suspense fallback={<div className="h-16" />}>
           <NavBar />
-        </Suspense>
 
+        </Suspense>
+        <MarketMarquee></MarketMarquee>
         {children}
 
         {/* Footer */}
